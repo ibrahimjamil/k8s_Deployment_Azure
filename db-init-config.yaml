@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb-config
+  namespace: pidev
+  labels:
+    app: pidev-backend-db
+    type: config
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS Pidev;

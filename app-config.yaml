@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pidev-backend-config
+  namespace: pidev
+  labels:
+    app: pidev-backend
+    type: config
+data:
+  application.yaml: |-
+    CompliantTimezoneShift: true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    logging:
+      file: 
+        name: logs/springboot.log
+      level:
+        tn:
+          esprit:
+            repository: warn
+            service: debug
+    mail:
+      smtp:
+        debug: true
+    server:
+      port: 8083
+      servlet:
+        context-path: /SpringMVC
+    spring:
+      datasource:
+        password: '${MYSQL_ROOT_PASSWORD}'
+        url: jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DB}?${MYSQL_ARGS}
+        username: root
+      jpa:
+        hibernate:
+          ddl-auto: update
+        properties:
+          hibernate:
+            dialect: org.hibernate.dialect.MySQL5Dialect
+        show-sql: true
+      mail:
+        host: smtp.gmail.com
+        password: Easyforus123
+        port: 587
+        properties:
+          mail:
+            smtp:
+              auth: true
+              starttls:
+                enable: true
+        username: ayoub.mahou@esprit.tn
+      mvc:
+        pathmatch:
+          matching-strategy: ANT_PATH_MATCHER

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pidev-backend-svc
+  namespace: pidev
+spec:
+  selector:
+    app: pidev-backend
+    type: backend
+  type: LoadBalancer 
+  ports:
+  - name: tcp
+    protocol: TCP
+    port: 8083
+    targetPort: 8083

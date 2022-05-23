@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-app
+  namespace: pidev
+  labels:
+    app: frontend-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: frontend-app
+      app: frontend-app
+  template:
+    metadata:
+      name: frontend-app
+      labels:
+        name: frontend-app
+        app: frontend-app
+
+    spec:
+      containers:
+      - name: frontend-app
+        image: ayoubmahou/pidev-front
+     
+        ports:
+         - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-app
+  namespace: pidev
+  labels:
+    name: frontend-app
+    app: frontend-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    name: frontend-app
+    app: frontend-app

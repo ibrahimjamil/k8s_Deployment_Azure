@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pidev-backend-db
+  namespace: pidev
+  labels:
+    app: pidev-backend-db
+    type: db
+spec:
+  replicas: 1
+  serviceName: pidev-backend-db-svc
+  selector:
+    matchLabels:
+      app: pidev-backend-db
+      type: db
+  template:
+    metadata:
+      labels:
+        app: pidev-backend-db
+        type: db
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: pidev-backend-db
+          image: mysql:5.7
+          args:
+            - "--ignore-db-dir=lost+found"
+          ports:
+            - name: tcp
+              protocol: TCP
+              containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: 
+               secretKeyRef: 
+                name: pidev-backend-db-secret
+                key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DB
+              valueFrom: 
+               secretKeyRef: 
+                name: pidev-backend-db-secret
+                key: MYSQL_DB
+          volumeMounts:
+            - name: pidev-backend-db-data
+              mountPath: /var/lib/mysql
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-initdb
+          configMap:
+            name: mysql-initdb-config
+        - name: pidev-backend-db-data
+          persistentVolumeClaim:
+            claimName: pidev-backend-pvc
